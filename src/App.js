@@ -53,7 +53,10 @@ class App extends Component {
         em JavaScript, podemos também acessar os props de um
         componente com this.props (ou props em componentes
         funcionais sem estado).  */}
-        <ListContacts onDeleteContact={this.removeContact} contacts={this.state.contacts}/>
+        <ListContacts 
+          onDeleteContact={this.removeContact} 
+          contacts={this.state.contacts}
+        />
       </div>
     )
   }
