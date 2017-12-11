@@ -19,19 +19,24 @@ class ListContacts extends Component{
     this.setState({ query: query.trim() })
   }
   render(){
+    // Destructuring objets em variaveis para deixar o
+    //codigo mais limpo ou facil de lêr
+    const { contacts, onDeleteContact } = this.props
+    const { query } = this.state
+
     // Filtra os contatos a serem exibidos
     let showingContacts
     // Caso o usuário digite algo será alterado o state do
     // componente e está condição será executada
-    if (this.state.query) {
+    if (query) {
       // Cria uma regex case insensitive 'i' baseado no campo imput
       // de busca, eliminando caracteres especiais
-      const match = new RegExp(escapeRegExp(this.state.query), 'i')
+      const match = new RegExp(escapeRegExp(query), 'i')
       // Filtra cada nome dentro do array de contatos que correspondem
       // a regex match e atribui ao filtro de contatos showingContacts
-      showingContacts = this.props.contacts.filter((contact) => match.test(contact.name))
+      showingContacts = contacts.filter((contact) => match.test(contact.name))
     } else {
-      showingContacts = this.props.contacts
+      showingContacts = contacts
     }
     return(
       <div className='list-contacts'>
@@ -41,7 +46,7 @@ class ListContacts extends Component{
             className='search-contacts'
             type='text'
             placeholder='Search contacts'
-            value={this.state.query}
+            value={query}
             onChange={(event) => this.updateQuery(event.target.value)}
           />
         </div>
@@ -67,7 +72,7 @@ class ListContacts extends Component{
               <p>{contact.name}</p>
               <p>{contact.email}</p>
             </div>
-            <button onClick={() => this.props.onDeleteContact(contact)} className='contact-remove'>
+            <button onClick={() => onDeleteContact(contact)} className='contact-remove'>
               Remove
             </button> 
           </li>
