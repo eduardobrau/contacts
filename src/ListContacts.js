@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import escapeRegExp from 'escape-string-regexp';
+import sortBy from 'sort-by';
 
 class ListContacts extends Component{
   // Se um componente estiver usando apenas o método render para
@@ -17,6 +19,20 @@ class ListContacts extends Component{
     this.setState({ query: query.trim() })
   }
   render(){
+    // Filtra os contatos a serem exibidos
+    let showingContacts
+    // Caso o usuário digite algo será alterado o state do
+    // componente e está condição será executada
+    if (this.state.query) {
+      // Cria uma regex case insensitive 'i' baseado no campo imput
+      // de busca, eliminando caracteres especiais
+      const match = new RegExp(escapeRegExp(this.state.query), 'i')
+      // Filtra cada nome dentro do array de contatos que correspondem
+      // a regex match e atribui ao filtro de contatos showingContacts
+      showingContacts = this.props.contacts.filter((contact) => match.test(contact.name))
+    } else {
+      showingContacts = this.props.contacts
+    }
     return(
       <div className='list-contacts'>
         {JSON.stringify(this.state)}
@@ -40,7 +56,9 @@ class ListContacts extends Component{
           pode mudar, e caso mude o React saberá qual item
           mudou sem precisar recriar todos os itens novamente.
         */}
-        {this.props.contacts.map((contact) =>(
+        {/*Atualiza a nova lista de contatos de this.props.contacts
+        para a variavel local showingContacts que contém o filtro*/ }
+        {showingContacts.map((contact) =>(
           <li key={contact.id} className='contact-list-item'> 
             <div className='contact-avatar' style={{
               backgroundImage: `url(${contact.avatarURL})`
