@@ -18,6 +18,10 @@ class ListContacts extends Component{
   updateQuery = (query) => {
     this.setState({ query: query.trim() })
   }
+  clearQuery = () => {
+    //this.setState({ query: '' })
+    this.updateQuery('');
+  }
   render(){
     // Destructuring objets em variaveis para deixar o
     //codigo mais limpo ou facil de lêr
@@ -40,7 +44,7 @@ class ListContacts extends Component{
     }
     return(
       <div className='list-contacts'>
-        {JSON.stringify(this.state)}
+        {/*JSON.stringify(this.state)*/}
         <div className='list-contacts-top'>
           <input
             className='search-contacts'
@@ -50,6 +54,21 @@ class ListContacts extends Component{
             onChange={(event) => this.updateQuery(event.target.value)}
           />
         </div>
+        {/* 
+        Caso o usuário digitar algo então será renderizado 
+        está div. lembrando que ao digitar algo o estado da
+        propriedade do component muda então o filtro 
+        showingcontacts poderá receber os contatos correspondente
+        e o seu tamanho não será mais igual a contacts, então
+        será renderizado a nova lista de contatos com base em
+        seu novo estado.
+        */}
+        {showingContacts.length !== contacts.length && (
+          <div className='showing-contacts'>
+            <span>Now showing {showingContacts.length} of {contacts.length} total</span>
+            <button onClick={this.clearQuery}>Show all</button>
+          </div>
+        )}
         <ol className='contact-list'>
         {/* 
           Adicionando colchetes na expressao. 
