@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import ListContacts from './ListContacts';
+import CreateContact from './CreateContact';
 import * as ContactsAPI from './utils/ContactsAPI';
  
 class App extends Component {
   /* Definido o estado inicial do component APP com
   o array de objetos contacts */
   state = {
-    contacts: []
+    contacts: [],
+    screen: 'list', // list, create
   }
   // Evento do ciclo de vida ou gancho que é disparado
   //sempre que os nós DOM estão prontos em uma página
@@ -30,6 +32,8 @@ class App extends Component {
       botão remover for clicado.*/
       contacts: state.contacts.filter((c) => c.id !== contact.id)
     }))
+    // Agora além de apagar os dados local estamos apagando do DB
+    ContactsAPI.remove(contact)
   }
   render() {
     return (
@@ -42,10 +46,15 @@ class App extends Component {
         em JavaScript, podemos também acessar os props de um
         componente com this.props (ou props em componentes
         funcionais sem estado).  */}
-        <ListContacts 
-          onDeleteContact={this.removeContact} 
-          contacts={this.state.contacts}
-        />
+        {this.state.screen === 'list' && (
+          <ListContacts 
+            onDeleteContact={this.removeContact} 
+            contacts={this.state.contacts}
+          />
+        )}
+        {this.state.screen === 'create' && (
+          <CreateContact/>
+        )}
       </div>
     )
   }
