@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import ListContacts from './ListContacts';
 import CreateContact from './CreateContact';
 import * as ContactsAPI from './utils/ContactsAPI';
+import { Route } from 'react-router-dom';
  
 class App extends Component {
   /* Definido o estado inicial do component APP com
   o array de objetos contacts */
   state = {
-    contacts: [],
-    screen: 'list', // list, create
+    contacts: []
   }
   // Evento do ciclo de vida ou gancho que é disparado
   //sempre que os nós DOM estão prontos em uma página
@@ -46,18 +46,15 @@ class App extends Component {
         em JavaScript, podemos também acessar os props de um
         componente com this.props (ou props em componentes
         funcionais sem estado).  */}
-        {this.state.screen === 'list' && (
+        <Route exact path='/' render={() => (
           <ListContacts 
             onDeleteContact={this.removeContact} 
             contacts={this.state.contacts}
-            onNavigate={() => {
-              this.setState({ screen: 'create' })
-            }}
           />
-        )}
-        {this.state.screen === 'create' && (
-          <CreateContact/>
-        )}
+        )}/>
+        
+        <Route path='/create' component={CreateContact}/>
+         
       </div>
     )
   }
